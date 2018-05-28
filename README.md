@@ -4,7 +4,7 @@ Text To Speech node.
 
 ## Install
 
-"""bash
+```bash
 pip install gTTS==1.2.1
 sudo apt-get install mpg321
-"""
+```
