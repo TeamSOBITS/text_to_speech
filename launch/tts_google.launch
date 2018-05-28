@@ -1,0 +1,6 @@
+<!-- Text To Speech Google -->
+<launch>
+
+	<node pkg="text_to_speech" type="tts_google.py" name="text_to_speech_node" output="screen" />
+
+</launch>
