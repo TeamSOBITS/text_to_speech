@@ -5,9 +5,17 @@ Text To Speech node.
 ## Install
 
 ```bash
-pip install gTTS==1.2.1
-sudo apt-get install mpg321
+$ pip install gTTS==1.2.1
+$ sudo apt-get install mpg321
 ```
+
+## How to Use
+
+```bash
+$ roslaunch text_to_speech tts_google.launch      <- google
+$ roslaunch text_to_speech tts_microsoft.launch      <- microsoft
+```
+
 ## References
 
 ### Bing text to speech API
