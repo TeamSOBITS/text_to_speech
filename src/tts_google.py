@@ -60,7 +60,7 @@ def tts_msg(msg_req):
 
 if __name__ == "__main__":
     rospy.init_node('text_to_speech_node')
-    srv = rospy.Service('speech_word', TextToSpeech, tts_srv)
-    sub = rospy.Subscriber('speech_word_msg', String, tts_msg)
+    srv = rospy.Service('/speech_word', TextToSpeech, tts_srv)
+    sub = rospy.Subscriber('/speech_word', String, tts_msg)
     rospy.loginfo("Ready to 'text to speech'.")
     rospy.spin()
