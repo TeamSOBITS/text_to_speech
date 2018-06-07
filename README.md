@@ -16,15 +16,19 @@ $ sudo apt-get install open-jtalk open-jtalk-mecab-naist-jdic hts-voice-nitech-j
 ```
 
 ## How to Use
+
+#### Launch Node
 ```bash
 $ roslaunch text_to_speech tts_google.launch      <- google
 $ roslaunch text_to_speech tts_microsoft.launch   <- microsoft
 $ roslaunch text_to_speech tts_open_jtalk.launch  <- open_jtalk
 ```
 
-## Subscribed Topics
+#### Subscribed Topics
 /speech_word (std_msgs/String)
 
+#### Service List
+/speech_word (text_to_speech/TextToSpeech)
 
 ## How to change the voice in _open jtalk_
   - Open **text_to_speech/src/tts_open_jtalk.py**
