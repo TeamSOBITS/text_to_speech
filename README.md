@@ -1,14 +1,16 @@
 # text_to_speech
 Text To Speech node.  
-open_jtalkのサービス化は少々お待ちください
+open_jtalkのサービス化は少々お待ちください.
+Microsoftはまだ動かないです.
 
 ## Install
 
+#### Install gTTS
 ```bash
 $ pip install gTTS==1.2.1
 $ sudo apt-get install mpg321
 ```
-- For open_jtalk  
+### Install open_jtalk  
 ```bash  
 $ sudo apt-get install open-jtalk open-jtalk-mecab-naist-jdic hts-voice-nitech-jp-atr503-m001
 ```
