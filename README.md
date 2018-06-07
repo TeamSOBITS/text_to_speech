@@ -10,7 +10,7 @@ Microsoftはまだ動かないです.
 $ pip install gTTS==1.2.1
 $ sudo apt-get install mpg321
 ```
-### Install open_jtalk  
+#### Install open_jtalk  
 ```bash  
 $ sudo apt-get install open-jtalk open-jtalk-mecab-naist-jdic hts-voice-nitech-jp-atr503-m001
 ```
