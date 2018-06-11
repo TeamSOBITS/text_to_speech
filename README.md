@@ -13,6 +13,7 @@ $ sudo apt-get install mpg321
 #### Install open_jtalk  
 ```bash  
 $ sudo apt-get install open-jtalk open-jtalk-mecab-naist-jdic hts-voice-nitech-jp-atr503-m001
+$ sudo pip install wave  
 ```
 
 ## How to Use

@@ -2,6 +2,7 @@
 #coding: utf-8
 import subprocess
 import rospy
+import wave
 
 from std_msgs.msg import *
 
@@ -52,6 +53,11 @@ def open_jtalk():
     #再生
     aplay = ['aplay', '-q', './open_jtalk.wav']
     wr = subprocess.Popen(aplay)
+
+    #発話時間の表示
+    wf = wave.open("./open_jtalk.wav" , "r" )
+    print"Time[s]:", float(wf.getnframes()) / wf.getframerate()
+
 
     # 発話が終わったらflagをfalseにする
     Speech_flag = False
