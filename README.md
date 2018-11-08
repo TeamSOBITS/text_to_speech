@@ -1,28 +1,50 @@
 # text_to_speech
 Text To Speech node.  
-open_jtalkのサービス化は少々お待ちください.
-Microsoftはまだ動かないです.
+Microsoftはまだ動かないです.  
+英語はtts_google.launch、日本語はtts_open_jtalk.launchを使用してください。  
+ 
+
 
 ## Install
-
+#### Install this repository
+```bash
+$ cd ~/catkin_ws/src
+$ git clone https://gitlab.com/TeamSOBITS/text_to_speech.gitlab
+$ cd ../ && catkin_make
+```
 #### Install gTTS
 ```bash
 $ pip install gTTS==1.2.1
 $ sudo apt-get install mpg321
 ```
-#### Install open_jtalk  
+#### Install wave & voice data
 ```bash  
 $ sudo apt-get install open-jtalk open-jtalk-mecab-naist-jdic hts-voice-nitech-jp-atr503-m001
 $ sudo pip install wave  
 ```
 
+#### Install mutagen
+```bash
+$ sudo pip install mutagen
+```
+
+
 ## How to Use
 
 #### Launch Node
+- google
 ```bash
-$ roslaunch text_to_speech tts_google.launch      <- google
-$ roslaunch text_to_speech tts_microsoft.launch   <- microsoft
-$ roslaunch text_to_speech tts_open_jtalk.launch  <- open_jtalk
+$ roslaunch text_to_speech tts_google.launch
+```
+
+- microsoft
+```bash
+$ roslaunch text_to_speech tts_microsoft.launch
+```
+
+- open_jtalk
+```bash
+$ roslaunch text_to_speech tts_open_jtalk.launch
 ```
 
 #### Subscribed Topics

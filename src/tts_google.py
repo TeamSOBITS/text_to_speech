@@ -7,9 +7,9 @@ import subprocess
 from gtts import gTTS
 from text_to_speech.srv import *
 from std_msgs.msg import String, Bool
+from mutagen.mp3 import MP3
 
 def text_to_speech(text):
-
     rospy.loginfo("Served text '''" + str(text) + "'''.")
 
     """ decode """
@@ -40,6 +40,12 @@ def text_to_speech(text):
     play_cmd = "mpg321 " +str(save_path)
     #rospy.loginfo("play_cmd=" + play_cmd)
     subprocess.call(play_cmd, shell=True)
+
+    """ get play_time """
+    mp3 = MP3(save_path)
+    play_time = mp3.info.length #音声ファイルの再生時間を取得
+    #rospy.loginfo("play_time:[%s]"%str(play_time))
+    rospy.sleep(play_time)
 
     return True
 
