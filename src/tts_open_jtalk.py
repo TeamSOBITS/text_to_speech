@@ -3,26 +3,11 @@
 import subprocess
 import rospy
 import wave
-
+from text_to_speech.srv import *
 from std_msgs.msg import *
 
-# -- Global変数 -- #
-Speech_word = String()
-Speech_flag = Bool()
-
-# /speech_word のsubscribeとflagのスイッチ
-def speech_word_sub(msg):
-    global Speech_word
-    global Speech_flag
-
-    Speech_word = msg.data
-    Speech_flag = True
-
-def open_jtalk():
-    global Speech_word
-    global Speech_flag
-
-    rospy.loginfo(str(Speech_word))
+def open_jtalk(speech_word):
+    rospy.loginfo("speech_word:[%s]"%speech_word)
 
     # コマンドを変数に格納して、最後にまとめて実行する
     open_jtalk = ['open_jtalk'] # これはそのまま
@@ -46,7 +31,7 @@ def open_jtalk():
 
     # subprocessで実行する
     c = subprocess.Popen(cmd, stdin=subprocess.PIPE)
-    c.stdin.write(Speech_word)
+    c.stdin.write(speech_word)
     c.stdin.close()
     c.wait()
 
@@ -56,26 +41,35 @@ def open_jtalk():
 
     #発話時間の表示
     wf = wave.open("./open_jtalk.wav" , "r" )
-    print"Time[s]:", float(wf.getnframes()) / wf.getframerate()
+    play_time =  float(wf.getnframes()) / wf.getframerate()
+    print "Time[s]:%s"%str(play_time)
+
+    rospy.sleep(play_time)
+
+    return True
+
+def openjtalk_srv(srv_req):
+    result = open_jtalk(srv_req.text)
+    if result == True:
+        return TextToSpeechResponse(True)
+    else:
+        return TextToSpeechResponse(False)
 
 
-    # 発話が終わったらflagをfalseにする
-    Speech_flag = False
-
+def openjtalk_msg(sub_msg):
+    pub = rospy.Publisher("tts_result", Bool, queue_size=1)
+    result = open_jtalk(sub_msg.data)
+    if result == True:
+        pub.publish(True)
+    else:
+        pub.publish(False)
 
 def main():
-    global Speech_word
-    global Speech_flag
-
     rospy.init_node("tts_open_jtalk", anonymous=True)
-
-    sub_topic = rospy.Subscriber("/speech_word", String, speech_word_sub)
-
-    while not rospy.is_shutdown():
-        if Speech_flag == True:
-            open_jtalk()
-        else:
-            pass
+    sub = rospy.Subscriber("/speech_word", String, openjtalk_msg)
+    srv = rospy.Service("/speech_word", TextToSpeech, openjtalk_srv)
+    rospy.loginfo("Ready to 'text to speech(Japanese)'.")
+    rospy.spin()
 
 if __name__ == "__main__":
     main()
