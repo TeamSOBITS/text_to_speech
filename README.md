@@ -14,7 +14,9 @@ $ cd ../ && catkin_make
 ```
 #### Install gTTS
 ```bash
-$ pip install gTTS==1.2.1
+$ pip install gTTS==1.2.1 #これだと動かないかも
+$ pip install gTTS==2.0.1
+$ pip install gTTS-token --upgrade
 $ sudo apt-get install mpg321
 ```
 #### Install wave & voice data
