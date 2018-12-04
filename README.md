@@ -29,8 +29,8 @@ $ sudo pip install wave
 ```bash
 $ sudo pip install mutagen
 ```
-
-
+<br/>
+<br/>
 ## How to Use
 
 #### Launch Node
@@ -48,18 +48,21 @@ $ roslaunch text_to_speech tts_microsoft.launch
 ```bash
 $ roslaunch text_to_speech tts_open_jtalk.launch
 ```
-
+<br/>
 #### Subscribed Topics
     /speech_word (std_msgs/String)
-
+<br/>
 #### Service List
     /speech_word (text_to_speech/TextToSpeech)
-
+<br/>
+<br/>
 ## How to change the voice in _open jtalk_
   - Open **text_to_speech/src/tts_open_jtalk.py**
   - Re-write **line 31**
   - You can find _.htsvoice_ in **text_to_speech/open_jtalk_voice_data/**
 
+<br/>
+<br/>
 ## References
 
 ### Bing text to speech API
