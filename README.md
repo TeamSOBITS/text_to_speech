@@ -9,7 +9,7 @@ Microsoftはまだ動かないです.
 #### Install this repository
 ```bash
 $ cd ~/catkin_ws/src
-$ git clone https://gitlab.com/TeamSOBITS/text_to_speech.gitlab
+$ git clone https://gitlab.com/TeamSOBITS/text_to_speech.git
 $ cd ../ && catkin_make
 ```
 #### Install gTTS
