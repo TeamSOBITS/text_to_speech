@@ -2,7 +2,7 @@
 Text To Speech node.  
 Microsoftはまだ動かないです.  
 英語はtts_google.launch、日本語はtts_open_jtalk.launchを使用してください。  
- 
+
 
 
 ## Install
@@ -56,9 +56,11 @@ $ roslaunch text_to_speech tts_open_jtalk.launch
 
 
 ## How to change the voice in _open jtalk_
-  - Open **text_to_speech/src/tts_open_jtalk.py**
-  - Re-write **line 31**
-  - You can find _.htsvoice_ in **text_to_speech/open_jtalk_voice_data/**
+＜open_jtalkの声質の変え方＞  
+**text_to_speech/src/tts_open_jtalk.py**の１７行目で声質のデータを読み込んでいます（~.htsvoice)。  
+その部分を別のhtsvoiceデータに書き換えてください。  
+htsvoiceデータは、**text_to_speech/open_jtalk_voice_data**の中にあります。
+
 
 
 ## References
