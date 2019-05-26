@@ -13,7 +13,6 @@ sudo apt install open-jtalk open-jtalk-mecab-naist-jdic hts-voice-nitech-jp-atr5
 echo "Install wave"
 pip install wave  
 
-
 echo "Install mutagen"
 pip install mutagen
 
