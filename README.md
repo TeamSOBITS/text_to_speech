@@ -12,22 +12,11 @@ $ cd ~/catkin_ws/src
 $ git clone https://gitlab.com/TeamSOBITS/text_to_speech.git
 $ cd ../ && catkin_make
 ```
-#### Install gTTS
-```bash
-$ pip install gTTS==1.2.1 #これだと動かないかも
-$ pip install gTTS==2.0.1
-$ pip install gTTS-token --upgrade
-$ sudo apt-get install mpg321
-```
-#### Install wave & voice data
-```bash  
-$ sudo apt-get install open-jtalk open-jtalk-mecab-naist-jdic hts-voice-nitech-jp-atr503-m001
-$ sudo pip install wave  
-```
 
-#### Install mutagen
+#### Install depencies  
 ```bash
-$ sudo pip install mutagen
+$ cd ~/catkin_ws/src/text_to_speech  
+$ sh install.sh
 ```
 
 ## How to Use
