@@ -37,15 +37,15 @@ def text_to_speech(text):
     #rospy.loginfo("save_path=" + str(save_path))
 
     """ play back """
-    play_cmd = "mpg321 " +str(save_path)
+    play_cmd = "mpg321 " + str(save_path)
     #rospy.loginfo("play_cmd=" + play_cmd)
-    subprocess.call(play_cmd, shell=True)
+    subprocess.Popen(play_cmd, shell=True)
 
     """ get play_time """
     mp3 = MP3(save_path)
     play_time = mp3.info.length #音声ファイルの再生時間を取得
     #rospy.loginfo("play_time:[%s]"%str(play_time))
-    rospy.sleep(play_time)
+    rospy.sleep(play_time) #再生時間分だけsleep
 
     return True
 
