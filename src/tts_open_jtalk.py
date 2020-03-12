@@ -6,6 +6,8 @@ import wave
 from text_to_speech.srv import *
 from std_msgs.msg import *
 
+sobit_mini_head_status_publisher = rospy.Publisher("/sobit_mini_head/status", String, queue_size=10)
+
 def open_jtalk(speech_word):
     rospy.loginfo("speech_word:[%s]"%speech_word)
 
@@ -37,14 +39,16 @@ def open_jtalk(speech_word):
 
     #再生
     aplay = ['aplay', '-q', './open_jtalk.wav']
+    sobit_mini_head_status_publisher.publish("speaking")
     wr = subprocess.Popen(aplay)
-
+    
     #発話時間の表示
     wf = wave.open("./open_jtalk.wav" , "r" )
     play_time =  float(wf.getnframes()) / wf.getframerate()
     print "Time[s]:%s"%str(play_time)
 
     rospy.sleep(play_time)
+    sobit_mini_head_status_publisher.publish("normal")
 
     return True
 

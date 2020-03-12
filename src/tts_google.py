@@ -9,6 +9,8 @@ from text_to_speech.srv import *
 from std_msgs.msg import String, Bool
 from mutagen.mp3 import MP3
 
+sobit_mini_head_status_publisher = rospy.Publisher("/sobit_mini_head/status", String, queue_size=10)
+
 def text_to_speech(text):
     rospy.loginfo("Served text '''" + str(text) + "'''.")
 
@@ -39,6 +41,7 @@ def text_to_speech(text):
     """ play back """
     play_cmd = "mpg321 " + str(save_path)
     #rospy.loginfo("play_cmd=" + play_cmd)
+    sobit_mini_head_status_publisher.publish("speaking")
     subprocess.Popen(play_cmd, shell=True)
 
     """ get play_time """
@@ -46,6 +49,7 @@ def text_to_speech(text):
     play_time = mp3.info.length #音声ファイルの再生時間を取得
     #rospy.loginfo("play_time:[%s]"%str(play_time))
     rospy.sleep(play_time) #再生時間分だけsleep
+    sobit_mini_head_status_publisher.publish("normal")
 
     return True
 
