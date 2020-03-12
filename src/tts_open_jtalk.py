@@ -6,11 +6,10 @@ import wave
 from text_to_speech.srv import *
 from std_msgs.msg import *
 
-sobit_mini_head_status_publisher = rospy.Publisher("/sobit_mini_head/status", String, queue_size=10)
-
 def open_jtalk(speech_word):
     rospy.loginfo("speech_word:[%s]"%speech_word)
-
+    sobit_mini_head_status_publisher = rospy.Publisher("/sobit_mini_head/status", String, queue_size=10)
+    
     # コマンドを変数に格納して、最後にまとめて実行する
     open_jtalk = ['open_jtalk'] # これはそのまま
 
@@ -41,7 +40,7 @@ def open_jtalk(speech_word):
     aplay = ['aplay', '-q', './open_jtalk.wav']
     sobit_mini_head_status_publisher.publish("speaking")
     wr = subprocess.Popen(aplay)
-    
+
     #発話時間の表示
     wf = wave.open("./open_jtalk.wav" , "r" )
     play_time =  float(wf.getnframes()) / wf.getframerate()

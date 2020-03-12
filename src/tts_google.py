@@ -9,10 +9,9 @@ from text_to_speech.srv import *
 from std_msgs.msg import String, Bool
 from mutagen.mp3 import MP3
 
-sobit_mini_head_status_publisher = rospy.Publisher("/sobit_mini_head/status", String, queue_size=10)
-
 def text_to_speech(text):
     rospy.loginfo("Served text '''" + str(text) + "'''.")
+    sobit_mini_head_status_publisher = rospy.Publisher("/sobit_mini_head/status", String, queue_size=10)
 
     """ decode """
     speech_text = codecs.decode(str(text),"utf-8")
