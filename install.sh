@@ -16,5 +16,13 @@ pip install wave
 echo "Install mutagen"
 pip install mutagen
 
+echo "Install pico2wave"
+sudo apt install libttspico-utils
+
+echo "Install alsa"
+sudo apt install alsa alsa-utils
+
+echo "Install soundfile"
+sudo pip install soundfile
 
 echo "finish"
