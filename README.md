@@ -1,7 +1,12 @@
 # text_to_speech
 Text To Speech node.  
-Microsoftはまだ動かないです.  
-英語はtts_google.launch、日本語はtts_open_jtalk.launchを使用してください。  
+
+- english.launch
+    - tts_google.py(修正中)
+    - tts_pico.py
+    - tts_microsoft.py(修正中)
+- japanese.launch
+    - tts_open_jtalk.py
 
 
 
