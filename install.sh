@@ -24,6 +24,6 @@ sudo apt install alsa alsa-utils
 
 echo "Install soundfile"
 sudo pip install soundfile
-sudo apt install python-soundfile
+sudo apt install -y python-soundfile
 
 echo "finish"
