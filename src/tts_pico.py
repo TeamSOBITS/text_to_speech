@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # coding: utf-8
 import rospy
 import rospkg
@@ -14,7 +14,7 @@ SAVE_PATH = ROSPACK.get_path("text_to_speech") + "/voice/speech_word.wav"
 
 def text_to_speech(text):
     #decode
-    speech_text = codecs.decode(str(text),"utf-8")
+    speech_text = codecs.decode(str(text).encode('utf-8'))
     
     #Blank check
     if speech_text and speech_text.strip():
