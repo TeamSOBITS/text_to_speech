@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #coding: utf-8
 import subprocess
 import rospy
@@ -32,7 +32,7 @@ def open_jtalk(speech_word):
 
     # subprocessで実行する
     c = subprocess.Popen(cmd, stdin=subprocess.PIPE)
-    c.stdin.write(speech_word)
+    c.stdin.write(speech_word.encode('utf-8'))
     c.stdin.close()
     c.wait()
 
@@ -44,7 +44,7 @@ def open_jtalk(speech_word):
     #発話時間の表示
     wf = wave.open("./open_jtalk.wav" , "r" )
     play_time =  float(wf.getnframes()) / wf.getframerate()
-    print "Time[s]:%s"%str(play_time)
+    print("Time[s]:", str(play_time))
 
     rospy.sleep(play_time)
     sobit_mini_head_status_publisher.publish("normal")
