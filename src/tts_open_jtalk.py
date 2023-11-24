@@ -8,14 +8,14 @@ from std_msgs.msg import *
 
 def open_jtalk(speech_word):
     rospy.loginfo("speech_word:[%s]"%speech_word)
-    sobit_mini_head_status_publisher = rospy.Publisher("/sobit_mini_head/status", String, queue_size=10)
     
     # コマンドを変数に格納して、最後にまとめて実行する
     open_jtalk = ['open_jtalk'] # これはそのまま
 
     mech = ['-x','/var/lib/mecab/dic/open-jtalk/naist-jdic'] # 辞書？
 
-    htsvoice = ['-m', '/usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice'] #声質のデータ
+    # 声質のデータ
+    htsvoice = ['-m', rospy.get_param("voice_data")] #声質のデータ
     #htsvoice = ['-m', '/path/to/hoge.htsvoice']
 
 
@@ -31,15 +31,14 @@ def open_jtalk(speech_word):
     cmd = open_jtalk+mech+htsvoice+speed+out_wav+out_log+all_pass+post_filter
 
     # subprocessで実行する
-    c = subprocess.Popen(cmd, stdin=subprocess.PIPE)
-    c.stdin.write(speech_word.encode('utf-8'))
-    c.stdin.close()
-    c.wait()
+    with subprocess.Popen(cmd, stdin=subprocess.PIPE) as execute:
+        execute.stdin.write(speech_word.encode('utf-8'))
+        execute.stdin.close()
+        execute.wait()
 
-    #再生
-    aplay = ['aplay', '-q', './open_jtalk.wav']
-    sobit_mini_head_status_publisher.publish("speaking")
-    wr = subprocess.Popen(aplay)
+    #再生 []内の内容は変更NG
+    playback_cmd = ['aplay', '-q', './open_jtalk.wav']
+    subprocess.Popen(playback_cmd)
 
     #発話時間の表示
     wf = wave.open("./open_jtalk.wav" , "r" )
@@ -47,25 +46,16 @@ def open_jtalk(speech_word):
     print("Time[s]:", str(play_time))
 
     rospy.sleep(play_time)
-    sobit_mini_head_status_publisher.publish("normal")
-
     return True
 
 def openjtalk_srv(srv_req):
     result = open_jtalk(srv_req.text)
-    if result == True:
-        return TextToSpeechResponse(True)
-    else:
-        return TextToSpeechResponse(False)
-
+    return TextToSpeechResponse(result)
 
 def openjtalk_msg(sub_msg):
     pub = rospy.Publisher("tts_result", Bool, queue_size=1)
     result = open_jtalk(sub_msg.data)
-    if result == True:
-        pub.publish(True)
-    else:
-        pub.publish(False)
+    pub.publish(result)
 
 def main():
     rospy.init_node("tts_open_jtalk", anonymous=True)
