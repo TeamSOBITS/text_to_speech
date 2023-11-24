@@ -2,9 +2,7 @@
 Text To Speech node.  
 
 - english.launch
-    - tts_google.py(修正中)
     - tts_pico.py
-    - tts_microsoft.py(修正中)
 - japanese.launch
     - tts_open_jtalk.py
 
@@ -27,15 +25,6 @@ $ sh install.sh
 ## How to Use
 
 #### Launch Node
-- google
-```bash
-$ roslaunch text_to_speech tts_google.launch
-```
-
-- microsoft
-```bash
-$ roslaunch text_to_speech tts_microsoft.launch
-```
 
 - open_jtalk
 ```bash
