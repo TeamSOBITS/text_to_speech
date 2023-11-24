@@ -26,9 +26,14 @@ $ sh install.sh
 
 #### Launch Node
 
-- open_jtalk
+
 ```bash
-$ roslaunch text_to_speech tts_open_jtalk.launch
+$ roslaunch text_to_speech english.launch
+```
+
+- japanese
+```bash
+$ roslaunch text_to_speech japanese.launch
 ```
 
 #### Subscribed Topics
