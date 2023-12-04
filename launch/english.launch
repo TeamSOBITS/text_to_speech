@@ -1,7 +1,6 @@
 <launch>
 
-	<!--node pkg="text_to_speech" type="tts_google.py" name="text_to_speech_node" output="screen" /-->
 	<node pkg="text_to_speech" type="tts_pico.py" name="text_to_speech_node" output="screen" />
-	<!--node pkg="text_to_speech" type="tts_microsoft.py" name="text_to_speech_node" output="screen" /-->
+	<!-- <param name="voice_data" value="$(find text_to_speech)/open_jtalk_voice_data/mei/mei_normal.htsvoice" /> -->
 
 </launch>

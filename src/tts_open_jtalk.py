@@ -9,38 +9,38 @@ from std_msgs.msg import *
 def open_jtalk(speech_word):
     rospy.loginfo("speech_word:[%s]"%speech_word)
     
-    # コマンドを変数に格納して、最後にまとめて実行する
-    open_jtalk = ['open_jtalk'] # これはそのまま
+    # Storing commands in variables and executing them collectively at the end.
+    open_jtalk = ['open_jtalk'] 
 
-    mech = ['-x','/var/lib/mecab/dic/open-jtalk/naist-jdic'] # 辞書？
+    mech = ['-x','/var/lib/mecab/dic/open-jtalk/naist-jdic'] # dictionary
 
-    # 声質のデータ
-    htsvoice = ['-m', rospy.get_param("voice_data")] #声質のデータ
+    # voice_data
+    htsvoice = ['-m', rospy.get_param("voice_data")] 
     #htsvoice = ['-m', '/path/to/hoge.htsvoice']
 
 
-    # オプションの設定（http://moblog.absgexp.net/openjtalk/)
+    # option setting（http://moblog.absgexp.net/openjtalk/)
     all_pass = ['-a', '0.5']
     post_filter = ['-b', '0.3']
     speed = ['-r', '1.0']
 
-    out_wav = ['-ow', './open_jtalk.wav'] # 音声ファイルの保存場所の設定
-    out_log = ['-ot', './open_jtalk.log'] # ログの保存場所の設定
+    out_wav = ['-ow', './open_jtalk.wav'] # wav file place setting
+    out_log = ['-ot', './open_jtalk.log'] # log file place setting
 
-    # 変数をまとめる
+    # including variable name
     cmd = open_jtalk+mech+htsvoice+speed+out_wav+out_log+all_pass+post_filter
 
-    # subprocessで実行する
+    # execute in subprocess
     with subprocess.Popen(cmd, stdin=subprocess.PIPE) as execute:
         execute.stdin.write(speech_word.encode('utf-8'))
         execute.stdin.close()
         execute.wait()
 
-    #再生 []内の内容は変更NG
+    #replay [] not change
     playback_cmd = ['aplay', '-q', './open_jtalk.wav']
     subprocess.Popen(playback_cmd)
 
-    #発話時間の表示
+    # get play time
     wf = wave.open("./open_jtalk.wav" , "r" )
     play_time =  float(wf.getnframes()) / wf.getframerate()
     print("Time[s]:", str(play_time))

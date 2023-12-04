@@ -13,15 +13,15 @@ ROSPACK = rospkg.RosPack()
 SAVE_PATH = ROSPACK.get_path("text_to_speech") + "/voice/speech_word.wav"
 
 def text_to_speech(text):
-    #decode
+    # decode
     speech_text = codecs.decode(str(text).encode('utf-8'))
     
-    #Blank check
+    # Blank check
     if not speech_text or not speech_text.strip():
         rospy.logerr("Input text is empty or blank.")
         return False
     
-    #Unicode error check
+    # Unicode error check
     try:
         rospy.loginfo("Input text [" + str(speech_text) + " ] ")
     except Exception as e:
@@ -29,24 +29,22 @@ def text_to_speech(text):
         return False
 
 
-    #remove old file
+    # remove old file
     if os.path.exists(SAVE_PATH):
         cmd = "rm %s" % SAVE_PATH
         subprocess.call(cmd, shell=True)
         # os.remove(SAVE_PATH)
 
-
-    #create wav file
+    # create wav file
     cmd = "pico2wave -w %s '%s' " % (SAVE_PATH, speech_text)
     subprocess.call(cmd, shell=True)
 
-
-    #get play time
+    # get play time
     f = sf.SoundFile(SAVE_PATH)
     play_time = float(len(f)) / float(f.samplerate)
     print("Time[s]:", str(play_time))
 
-    #play wav file and sleep
+    # play wav file and sleep
     cmd = "aplay %s" % SAVE_PATH
     subprocess.Popen(cmd, shell=True)
     rospy.sleep(play_time)
@@ -62,10 +60,6 @@ def tts_msg(msg_req):
     pub = rospy.Publisher("speech_word_msg_result", Bool, queue_size = 1)
     msg_result = text_to_speech(msg_req.data)
     pub.publish(msg_result)
-    # if msg_result == True:
-    #     pub.publish(True)
-    # else:
-    #     pub.publish(False)
 
 def main():
     rospy.init_node("text_to_speech_node", anonymous=True)
