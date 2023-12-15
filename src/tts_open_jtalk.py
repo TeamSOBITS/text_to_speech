@@ -3,8 +3,8 @@
 import subprocess
 import rospy
 import wave
-from text_to_speech.srv import *
-from std_msgs.msg import *
+from text_to_speech.srv import TextToSpeechResponse, TextToSpeech
+from std_msgs.msg import Bool, String
 
 def open_jtalk(speech_word):
     rospy.loginfo("speech_word:[%s]"%speech_word)
