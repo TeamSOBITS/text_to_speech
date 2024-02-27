@@ -56,15 +56,9 @@ def tts_srv(srv_req):
     srv_result = text_to_speech(srv_req.text)
     return TextToSpeechResponse(srv_result)
 
-def tts_msg(msg_req):
-    pub = rospy.Publisher("speech_word_msg_result", Bool, queue_size = 1)
-    msg_result = text_to_speech(msg_req.data)
-    pub.publish(msg_result)
-
 def main():
     rospy.init_node("text_to_speech_node", anonymous=True)
     srv = rospy.Service("/speech_word", TextToSpeech, tts_srv)
-    sub = rospy.Subscriber("/speech_word", String, tts_msg)
     rospy.loginfo("Ready to 'text to speech'.")
     rospy.spin()
 

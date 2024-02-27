@@ -52,14 +52,8 @@ def openjtalk_srv(srv_req):
     result = open_jtalk(srv_req.text)
     return TextToSpeechResponse(result)
 
-def openjtalk_msg(sub_msg):
-    pub = rospy.Publisher("tts_result", Bool, queue_size=1)
-    result = open_jtalk(sub_msg.data)
-    pub.publish(result)
-
 def main():
     rospy.init_node("tts_open_jtalk", anonymous=True)
-    sub = rospy.Subscriber("/speech_word", String, openjtalk_msg)
     srv = rospy.Service("/speech_word", TextToSpeech, openjtalk_srv)
     rospy.loginfo("Ready to 'text to speech(Japanese)'.")
     rospy.spin()
