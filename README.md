@@ -81,7 +81,7 @@ $ cd text_to_speech/
 
 ４．依存パッケージをインストールします．
 ```sh 
-$ sh install.sh
+$ bash install.sh
 ```
 
 ５．パッケージをコンパイルします．
@@ -116,8 +116,45 @@ $ roslaunch text_to_speech japanese.launch
 ```
 <p align="right">(<a href="#readme-top">上に戻る</a>)</p>
 
-#### Subscribed Topics
-    /speech_word (std_msgs/String)
+#### Example Code
+</details>
+<summary>Python</summary>
+
+```py
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*- #
+
+import rospy
+from text_to_speech.srv import TextToSpeech
+
+def tts_service(msg):
+    rospy.wait_for_service('speech_word')
+    try:
+        first_con = rospy.ServiceProxy('speech_word',TextToSpeech)
+        responce = first_con(msg)
+        return responce.result
+    except rospy.ServiceException as e:
+        print("could not call: %s",e)
+
+def main():
+    rospy.init_node('text_to_speech',anonymous=True)
+    rospy.sleep(0.1)
+
+    # Please insert the text within ''
+    message = '文字を入れて下さい'
+    send_message = tts_service(message)
+    rospy.loginfo(message)
+
+if __name__ == '__main__':
+    try:
+        main()
+    except rospy.ROSInterruptException:
+        pass
+
+```
+</details>
+
+<p align="right">(<a href="#readme-top">上に戻る</a>)</p>
 
 #### Service List
     /speech_word (text_to_speech/TextToSpeech)
@@ -135,37 +172,37 @@ htsvoiceデータは、**text_to_speech/open_jtalk_voice_data**の中にあり�
 <!-- マイルストーン -->
 ## マイルストーン
 
-- [ ] OSS
-    - [ ] ドキュメンテーションの英語化
-    - [ ] ライセンスの追加
+- [x] OSS
+    - [x] ドキュメンテーションの英語化
+    - [x] ライセンスの追加
 
 
-現時点のバッグや新規機能の依頼を確認するために[Issueページ](https://github.com/github_username/repo_name/issues) をご覧ください．
+現時点のバッグや新規機能の依頼を確認するために[Issueページ](https://github.com/TeamSOBITS/text_to_speech/issues) をご覧ください．
 
 <p align="right">(<a href="#readme-top">上に戻る</a>)</p>
 
 ## 変更履歴
  - 
 
+<p align="right">(<a href="#readme-top">上に戻る</a>)</p>
+
 <!-- 参考文献 -->
 ## 参考文献
 
-* []()
-* []()
 * []()
 
 <p align="right">(<a href="#readme-top">上に戻る</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
-[contributors-url]: https://github.com/github_username/repo_name/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo_name.svg?style=for-the-badge
-[forks-url]: https://github.com/github_username/repo_name/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo_name.svg?style=for-the-badge
-[stars-url]: https://github.com/github_username/repo_name/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
-[issues-url]: https://github.com/github_username/repo_name/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
-[license-url]: LICENSE
+[contributors-shield]: https://img.shields.io/github/contributors/TeamSOBITS/text_to_speech.svg?style=for-the-badge
+[contributors-url]: https://github.com/TeamSOBITS/text_to_speech/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/TeamSOBITS/text_to_speech.svg?style=for-the-badge
+[forks-url]: https://github.com/TeamSOBITS/text_to_speech/network/members
+[stars-shield]: https://img.shields.io/github/stars/TeamSOBITS/text_to_speech.svg?style=for-the-badge
+[stars-url]: https://github.com/TeamSOBITS/text_to_speech/stargazers
+[issues-shield]: https://img.shields.io/github/issues/TeamSOBITS/text_to_speech.svg?style=for-the-badge
+[issues-url]: https://github.com/TeamSOBITS/text_to_speech/issues
+[license-shield]: https://img.shields.io/github/license/TeamSOBITS/text_to_speech.svg?style=for-the-badge
+[license-url]: https://github.com/TeamSOBITS/text_to_speech/blob/feature/oss/LICENSE
+<!-- [license-url]: LICENSE -->

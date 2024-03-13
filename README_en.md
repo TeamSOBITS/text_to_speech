@@ -1,6 +1,6 @@
 <a name="readme-top"></a>
 
-[JP](readme.md) | [EN](template_readme_en.md)
+[JP](README.md) | [EN](README_en.md)
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
@@ -27,7 +27,7 @@
     </li>
     <li><a href="#launch-and-usage">Launch and Usage</a></li>
     <li><a href="#milestone">Milestone</a></li>
-    <li><a href="#issues">Issues</a></li>
+    <li><a href="#change-log">Change Log</a></li>
     <!-- <li><a href="#contributing">Contributing</a></li> -->
     <!-- <li><a href="#license">License</a></li> -->
     <li><a href="#references">References</a></li>
@@ -38,7 +38,7 @@
 
 <!-- setup -->
 
-## Overview
+## Introduction
 This is a speech functionality that vocalizes text and characters.
 
 ## Setup
@@ -75,7 +75,7 @@ $ cd text_to_speech/
 
 4. Install dependencies.
 ```sh
-$ sh install.sh
+$ bash install.sh
 ```
 
 5. Compile the package.
@@ -85,7 +85,7 @@ $ cd ../../ && catkin_make
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## How to Use
+## Launch and Usage
 #### Types of Launch Files
 There are two launch files in this repository. When you execute the launch, the following programs will start.
 - english.launch
@@ -107,22 +107,48 @@ $ roslaunch text_to_speech japanese.launch
 ```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-#### Subscribed Topics
-    /speech_word (std_msgs/String)
+#### Example Code
+<details>
+<summary>Python</summary>
 
-#### Service List
-    /speech_word (text_to_speech/TextToSpeech)
+```py
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*- #
+
+import rospy
+from text_to_speech.srv import TextToSpeech
+
+def tts_service(msg):
+    rospy.wait_for_service('speech_word')
+    try:
+        first_con = rospy.ServiceProxy('speech_word',TextToSpeech)
+        responce = first_con(msg)
+        return responce.result
+    except rospy.ServiceException as e:
+        print("could not call: %s",e)
+
+def main():
+    rospy.init_node('text_to_speech',anonymous=True)
+    rospy.sleep(0.1)
+
+    # Please insert the text within ''
+    message = 'please in the text'
+    send_message = tts_service(message)
+    rospy.loginfo(message)
+
+if __name__ == '__main__':
+    try:
+        main()
+    except rospy.ROSInterruptException:
+        pass
+
+```
+</details>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- MILESTONE -->
-## Milestone
-
-- [ ] OSS
-    - [ ] Translate documentation into English
-    - [ ] Adding License
-
-See the [open issues][license-url] for a full list of proposed features (and known issues).
+#### Service List
+    /speech_word (text_to_speech/TextToSpeech)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -133,21 +159,38 @@ htsvoice data can be found in **text_to_speech/open_jtalk_voice_data**.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## References
+<!-- MILESTONE -->
+## Milestone
 
+- [x] OSS
+    - [x] Translate documentation into English
+    - [x] Adding License
+
+See the [open issues](https://github.com/TeamSOBITS/text_to_speech/issues) for a full list of proposed features (and known issues).
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+## Change Log
+ -
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## References
+ -
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
-[contributors-url]: https://github.com/github_username/repo_name/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo_name.svg?style=for-the-badge
-[forks-url]: https://github.com/github_username/repo_name/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo_name.svg?style=for-the-badge
-[stars-url]: https://github.com/github_username/repo_name/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
-[issues-url]: https://github.com/github_username/repo_name/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
-[license-url]: LICENSE
+[contributors-shield]: https://img.shields.io/github/contributors/TeamSOBITS/text_to_speech.svg?style=for-the-badge
+[contributors-url]: https://github.com/TeamSOBITS/text_to_speech/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/TeamSOBITS/text_to_speech.svg?style=for-the-badge
+[forks-url]: https://github.com/TeamSOBITS/text_to_speech/network/members
+[stars-shield]: https://img.shields.io/github/stars/TeamSOBITS/text_to_speech.svg?style=for-the-badge
+[stars-url]: https://github.com/TeamSOBITS/text_to_speech/stargazers
+[issues-shield]: https://img.shields.io/github/issues/TeamSOBITS/text_to_speech.svg?style=for-the-badge
+[issues-url]: https://github.com/TeamSOBITS/text_to_speech/issues
+[license-shield]: https://img.shields.io/github/license/TeamSOBITS/text_to_speech.svg?style=for-the-badge
+[license-url]: https://github.com/TeamSOBITS/text_to_speech/blob/feature/oss/LICENSE
+<!-- [license-url]: LICENSE -->
