@@ -7,7 +7,6 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![License][license-shield]][license-url]
-<!-- [![MIT License][license-shield]][license-url] -->
 
 
 # text_to_speech
