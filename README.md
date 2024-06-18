@@ -202,7 +202,6 @@ htsvoiceデータは、**text_to_speech/open_jtalk_voice_data**の中にあり�
 [stars-shield]: https://img.shields.io/github/stars/TeamSOBITS/text_to_speech.svg?style=for-the-badge
 [stars-url]: https://github.com/TeamSOBITS/text_to_speech/stargazers
 [issues-shield]: https://img.shields.io/github/issues/TeamSOBITS/text_to_speech.svg?style=for-the-badge
-[issues-url]: https://github.com/TeamSOBITS/text_to_speech/issues
+[issues-url]: https://github.com/TeamSOBITS/v/issues
 [license-shield]: https://img.shields.io/github/license/TeamSOBITS/text_to_speech.svg?style=for-the-badge
-[license-url]: https://github.com/TeamSOBITS/text_to_speech/blob/feature/oss/LICENSE
-<!-- [license-url]: LICENSE -->
+[license-url]: LICENSE
