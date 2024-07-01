@@ -43,4 +43,10 @@ sudo apt-get install -y \
     python-soundfile
 
 
+# Install "sobits_msgs"
+cd ~/catkin_ws/src/
+git clone https://github.com/TeamSOBITS/sobits_msgs.git
+cd ~/catkin_ws/src/speech_recognition_vosk/
+
+
 echo "╚══╣ Install: Text-to-Speech (FINISHED) ╠══╝"
