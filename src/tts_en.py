@@ -6,7 +6,7 @@ import subprocess
 import codecs
 import os
 import soundfile as sf
-from text_to_speech.srv import TextToSpeechResponse, TextToSpeech
+from sobits_msgs.srv import TextToSpeechResponse, TextToSpeech
 from std_msgs.msg import String, Bool
 
 ROSPACK = rospkg.RosPack()
