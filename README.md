@@ -124,7 +124,7 @@ $ roslaunch text_to_speech japanese.launch
 # -*- coding: utf-8 -*- #
 
 import rospy
-from text_to_speech.srv import TextToSpeech
+from sobits_msgs.srv import TextToSpeech
 
 def tts_service(msg):
     rospy.wait_for_service('speech_word')
