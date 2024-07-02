@@ -156,7 +156,7 @@ if __name__ == '__main__':
 <p align="right">(<a href="#readme-top">上に戻る</a>)</p>
 
 #### Service List
-    /speech_word (text_to_speech/TextToSpeech)
+    /speech_word (sobits_msgs/TextToSpeech)
 
 <p align="right">(<a href="#readme-top">上に戻る</a>)</p>
 
