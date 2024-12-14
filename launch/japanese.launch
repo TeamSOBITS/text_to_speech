@@ -1,7 +1,0 @@
-<launch>
-
-	<node pkg="text_to_speech" type="tts_ja.py" name="text_to_speech_node" output="screen" />
-	<!-- <param name="voice_data" value="$(find text_to_speech)/open_jtalk_voice_data/mei/mei_normal.htsvoice" /> -->
-	<param name="voice_data" value="/usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice" />
-
-</launch>
