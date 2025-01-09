@@ -12,7 +12,9 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        (os.path.join('share', package_name), glob('launch/*.py')),
+        (os.path.join('share', package_name, 'launch'), glob('launch/*.py')),
+        (os.path.join('share', package_name, 'open_jtalk_voice_data'), glob('open_jtalk_voice_data/*.htsvoice')),
+        (os.path.join('share', package_name, 'sounds'), glob('sounds/*')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -20,7 +22,7 @@ setup(
     maintainer_email='ksuzuki9541@gmail.com',
     description='TODO: Package description',
     license='TODO: License declaration',
-    tests_require=['pytest'],
+    # tests_require=['pytest'],
     entry_points={
         'console_scripts': [
             'tts = text_to_speech.tts:main',
