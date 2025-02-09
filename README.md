@@ -53,8 +53,8 @@
 
 | System  | Version |
 | ------------- | ------------- |
-| Ubuntu | 20.04 (Focal Fossa) |
-| ROS | Noetic Ninjemys |
+| Ubuntu | 22.04 (Focal Fossa) |
+| ROS2 | Humble Hawksbill |
 | Python | 3.8 |
 
 <p align="right">(<a href="#readme-top">上に戻る</a>)</p>
@@ -63,7 +63,7 @@
 ## インストール方法
 １．'src'フォルダに移動します．
 ```sh
-$ cd ~/catkin_ws/src
+$ cd ~/colcon_ws/src
 ```
 
 ２．本レポジトリをcloneします．
@@ -77,77 +77,136 @@ $ git clone https://github.com/TeamSOBITS/text_to_speech.git
 $ cd text_to_speech/
 ```
 
+4．ブランチを切り替えます．
+```sh
+$ git checkout humble-devel
+```
 
-４．依存パッケージをインストールします．
+
+5．依存パッケージをインストールします．
 ```sh 
 $ bash install.sh
 ```
 
-５．パッケージをコンパイルします．
+6．パッケージをコンパイルします．
 ```sh
-$ cd ../../ && catkin_make
+$ cd ../../ && colcon build
 ```
 <p align="right">(<a href="#readme-top">上に戻る</a>)</p>
 
 
 ## 実行・操作方法
 
-#### launchファイルの種類
-本レポジトリには２つのlaunchファイルがあります．
-launchを実行したときに以下のプログラムが起動します．
-- english.launch
-    - tts_pico.py
-- japanese.launch
-    - tts_open_jtalk.py
-<p align="right">(<a href="#readme-top">上に戻る</a>)</p>
-
-
 #### launchファイルの起動方法
 
-- 英語
 ```sh
-$ roslaunch text_to_speech english.launch
+$ ros2 launch text_to_speech tts.launch.py
 ```
 
-- 日本語
+#### 言語の切り替え方法
+
+launchファイルに記載されているlanguageのコメントアウトを削除し，言語を選択してください．
 ```sh
-$ roslaunch text_to_speech japanese.launch
+parameters=[
+                {
+                    # 'language': 'en',
+                    'language': 'ja',
+                },
+```
+切り替えたら，パッケージをコンパイルします．
+```sh
+$ cd ../../ && colcon build
 ```
 <p align="right">(<a href="#readme-top">上に戻る</a>)</p>
-
-#### Example Code
-</details>
+<details>
 <summary>Python</summary>
+
+
+#### tts_client.py
+```sh
+$ cd ~/colcon_ws/src/text_to_speech
+```
+```sh
+$ python3 tts_client.py
+```
 
 ```py
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*- #
 
-import rospy
-from sobits_msgs.srv import TextToSpeech
+import rclpy
+from rclpy.action import ActionClient
+from sobits_interfaces.action import TextToSpeech  # sobits_msgs/action/TextToSpeech.action
 
-def tts_service(msg):
-    rospy.wait_for_service('speech_word')
-    try:
-        first_con = rospy.ServiceProxy('speech_word',TextToSpeech)
-        responce = first_con(msg)
-        return responce.result
-    except rospy.ServiceException as e:
-        print("could not call: %s",e)
+def tts_action(node, text):
+    """
+    アクションクライアントを使ってサーバーにテキストを送信し,結果を取得します.
+    """
+    # アクションクライアントの生成
+    action_client = ActionClient(node, TextToSpeech, '/speech_word')
+
+    # サーバーが準備できるまで待機
+    node.get_logger().info('アクションサーバーを待機中...')
+    action_client.wait_for_server()
+
+    # ゴールメッセージの作成
+    goal_msg = TextToSpeech.Goal()
+    goal_msg.text = text
+
+    # ゴールを送信し、結果を待機
+    node.get_logger().info(f'ゴールを送信中: "{text}"')
+    future = action_client.send_goal_async(goal_msg)
+    rclpy.spin_until_future_complete(node, future)
+
+    # ゴールが受け入れられたかチェック
+    goal_handle = future.result()
+    if not goal_handle.accepted:
+        node.get_logger().error('ゴールが拒否されました.')
+        return
+
+    # 結果を待機
+    result_future = goal_handle.get_result_async()
+    rclpy.spin_until_future_complete(node, result_future)
+    result = result_future.result().result
+
+    # 結果を表示
+    if result.success:
+        node.get_logger().info('音声合成が成功しました！')
+    else:
+        node.get_logger().error('音声合成に失敗しました.')
+
 
 def main():
-    rospy.init_node('text_to_speech',anonymous=True)
-    rospy.sleep(0.1)
+    try:
+        while True:
+            # ユーザーからの入力を取得
+            input_text = input('音声合成するテキストを入力してください ("exit"で終了): ')
+            
+            # プログラム終了判定
+            if input_text.strip() == 'EXIT':
+                print('プログラムを終了します.')
+                break
+            
+            # 空白文字や空の入力の場合は再入力を促す
+            if not input_text.strip():
+                print('テキストが空です.再入力してください.')
+                continue
 
-    # Please insert the text within ''
-    message = '文字を入れて下さい'
-    send_message = tts_service(message)
-    rospy.loginfo(message)
+            # TTS アクションを呼び出す
+            tts_action(node, input_text)
+
+    except KeyboardInterrupt:
+        print('\nプログラムが中断されました.')
+
+
 
 if __name__ == '__main__':
     try:
+        # ROS2初期化
+        rclpy.init()
+        node = rclpy.create_node('text_to_speech_client')
         main()
-    except rospy.ROSInterruptException:
+    except rclpy.exceptions.ROSInterruptException:
         pass
 
 ```
@@ -155,15 +214,23 @@ if __name__ == '__main__':
 
 <p align="right">(<a href="#readme-top">上に戻る</a>)</p>
 
-#### Service List
-    /speech_word (sobits_msgs/TextToSpeech)
+#### Action List
+    /speech_word (sobits_msgs/action/TextToSpeech.action)
 
 <p align="right">(<a href="#readme-top">上に戻る</a>)</p>
 
 
 ## open_jtalkの声質の変え方 
-**text_to_speech/launch/japanese.launch**の５行目で声質のデータを読み込んでいます（~.htsvoice)．
-その部分を別のhtsvoiceデータに書き換えてください．
+**text_to_speech/launch/tts.launch.py**において，parameters 内の voice_data を適切な .htsvoice ファイルのパスに変更してください．
+#### デフォルトの男性音声
+```
+'voice_data': '/usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice',
+```
+#### 女性音声モデルに変更
+```
+'voice_data': os.path.join(get_package_share_directory("text_to_speech"), "open_jtalk_voice_data", "cmu_us_arctic_slt.htsvoice"),
+```
+　
 htsvoiceデータは、**text_to_speech/open_jtalk_voice_data**の中にあります．
 
 <p align="right">(<a href="#readme-top">上に戻る</a>)</p>
