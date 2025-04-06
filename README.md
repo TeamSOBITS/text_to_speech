@@ -127,7 +127,7 @@ $ cd ../../ && colcon build
 $ cd ~/colcon_ws/src/text_to_speech
 ```
 ```sh
-$ python3 tts_client.py
+$ ros2 run text_to_speech tts_client
 ```
 
 ```py
@@ -177,37 +177,29 @@ def tts_action(node, text):
 
 
 def main():
+    rclpy.init()
+    node = rclpy.create_node('text_to_speech_client')
+
     try:
         while True:
-            # ユーザーからの入力を取得
-            input_text = input('音声合成するテキストを入力してください ("exit"で終了): ')
-            
-            # プログラム終了判定
+            input_text = input('音声合成するテキストを入力してください ("EXIT"で終了): ')
             if input_text.strip() == 'EXIT':
                 print('プログラムを終了します.')
                 break
-            
-            # 空白文字や空の入力の場合は再入力を促す
             if not input_text.strip():
                 print('テキストが空です.再入力してください.')
                 continue
 
-            # TTS アクションを呼び出す
             tts_action(node, input_text)
 
     except KeyboardInterrupt:
         print('\nプログラムが中断されました.')
-
-
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == '__main__':
-    try:
-        # ROS2初期化
-        rclpy.init()
-        node = rclpy.create_node('text_to_speech_client')
-        main()
-    except rclpy.exceptions.ROSInterruptException:
-        pass
+    main()
 
 ```
 </details>

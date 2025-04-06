@@ -105,6 +105,14 @@ $ ros2 launch text_to_speech tts.launch.py
 <details>
 <summary>Python</summary>
 
+#### tts_client_en.py
+```sh
+$ cd ~/colcon_ws/src/text_to_speech
+```
+```sh
+$ ros2 run text_to_speech tts_client_en
+```
+
 ```py
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*- #
@@ -151,36 +159,29 @@ def tts_action(node, text):
         node.get_logger().error('Text-to-speech failed.')
 
 def main():
+    rclpy.init()
+    node = rclpy.create_node('text_to_speech_client')
+
     try:
         while True:
-            # Get input from the user
-            input_text = input('Enter text for speech synthesis ("exit" to quit): ')
-
-            # Check if the user wants to exit
-            if input_text.strip().lower() == 'exit':
+            input_text = input('Enter text for speech synthesis ("EXIT" to quit): ')
+            if input_text.strip() == 'EXIT':
                 print('Exiting the program.')
                 break
-
-            # Prompt for re-entry if the input is empty
             if not input_text.strip():
-                print('Text is empty. Please enter again.')
+                print('Input is empty. Please enter text.')
                 continue
 
-            # Call the TTS Action
             tts_action(node, input_text)
 
     except KeyboardInterrupt:
-        print('\nProgram interrupted.')
-
+        print('\nProgram interrupted by user.')
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == '__main__':
-    try:
-        # Initialize ROS 2
-        rclpy.init()
-        node = rclpy.create_node('text_to_speech_client')
-        main()
-    except rclpy.exceptions.ROSInterruptException:
-        pass
+    main()
 
 ```
 </details>
