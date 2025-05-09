@@ -60,7 +60,7 @@ First, set up the following environment before proceeding to the installation st
 
 1. Move to the 'src' folder.
 ```sh
-$ cd ~/catkin_ws/src
+$ cd ~/colcon_ws/src
 ```
 
 2. Clone this repository.
@@ -73,37 +73,31 @@ $ git clone https://github.com/TeamSOBITS/text_to_speech.git
 $ cd text_to_speech/  
 ```
 
-4. Install dependencies.
+4. Switch to the appropriate branch:
+```sh
+$ git checkout humble-devel
+```
+
+5. Install dependencies.
 ```sh
 $ bash install.sh
 ```
 
-5. Compile the package.
+6. Compile the package.
 ```sh
-$ cd ../../ && catkin_make
+$ cd ../../ && colcon build
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Launch and Usage
-#### Types of Launch Files
-There are two launch files in this repository. When you execute the launch, the following programs will start.
-- english.launch
-    - tts_pico.py
-- japanese.launch
-    - tts_open_jtalk.py
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 #### Launching Files
 
-- English
 ```sh
-$ roslaunch text_to_speech english.launch
-```
-
-- japanese
-```sh
-$ roslaunch text_to_speech japanese.launch
+$ ros2 launch text_to_speech tts.launch.py
 ```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -111,51 +105,105 @@ $ roslaunch text_to_speech japanese.launch
 <details>
 <summary>Python</summary>
 
+#### tts_client_en.py
+```sh
+$ cd ~/colcon_ws/src/text_to_speech
+```
+```sh
+$ ros2 run text_to_speech tts_client_en
+```
+
 ```py
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*- #
 
-import rospy
-from sobits_msgs.srv import TextToSpeech
+import rclpy
+from rclpy.action import ActionClient
+from sobits_interfaces.action import TextToSpeech  # sobits_msgs/action/TextToSpeech.action
 
-def tts_service(msg):
-    rospy.wait_for_service('speech_word')
-    try:
-        first_con = rospy.ServiceProxy('speech_word',TextToSpeech)
-        responce = first_con(msg)
-        return responce.result
-    except rospy.ServiceException as e:
-        print("could not call: %s",e)
+def tts_action(node, text):
+    """
+    Sends text to the server using an ActionClient and retrieves the result.
+    """
+    # Create an ActionClient
+    action_client = ActionClient(node, TextToSpeech, '/speech_word')
+
+    # Wait for the server to be ready
+    node.get_logger().info('Waiting for the action server...')
+    action_client.wait_for_server()
+
+    # Create a goal message
+    goal_msg = TextToSpeech.Goal()
+    goal_msg.text = text
+
+    # Send the goal and wait for the result
+    node.get_logger().info(f'Sending goal: "{text}"')
+    future = action_client.send_goal_async(goal_msg)
+    rclpy.spin_until_future_complete(node, future)
+
+    # Check if the goal was accepted
+    goal_handle = future.result()
+    if not goal_handle.accepted:
+        node.get_logger().error('Goal was rejected.')
+        return
+
+    # Wait for the result
+    result_future = goal_handle.get_result_async()
+    rclpy.spin_until_future_complete(node, result_future)
+    result = result_future.result().result
+
+    # Display the result
+    if result.success:
+        node.get_logger().info('Text-to-speech succeeded!')
+    else:
+        node.get_logger().error('Text-to-speech failed.')
 
 def main():
-    rospy.init_node('text_to_speech',anonymous=True)
-    rospy.sleep(0.1)
+    rclpy.init()
+    node = rclpy.create_node('text_to_speech_client')
 
-    # Please insert the text within ''
-    message = 'please in the text'
-    send_message = tts_service(message)
-    rospy.loginfo(message)
+    try:
+        while True:
+            input_text = input('Enter text for speech synthesis ("EXIT" to quit): ')
+            if input_text.strip() == 'EXIT':
+                print('Exiting the program.')
+                break
+            if not input_text.strip():
+                print('Input is empty. Please enter text.')
+                continue
+
+            tts_action(node, input_text)
+
+    except KeyboardInterrupt:
+        print('\nProgram interrupted by user.')
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == '__main__':
-    try:
-        main()
-    except rospy.ROSInterruptException:
-        pass
+    main()
 
 ```
 </details>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-#### Service List
-    /speech_word (sobits_msgs/TextToSpeech)
-
+#### Action List
+/speech_word (sobits_msgs/action/TextToSpeech.action)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## How to change the voice in _open jtalk_ 
-In **text_to_speech/launch/japanese.launch**, the voice quality data（~.htsvoice) is loaded on line 5.  
-Replace that part with another htsvoice data. 
-htsvoice data can be found in **text_to_speech/open_jtalk_voice_data**.
+
+
+In **text_to_speech/launch/tts.launch.py**, modify the voice_data parameter to specify the path to the desired .htsvoice file.
+#### Default Male Voice
+```
+'voice_data': '/usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice',
+```
+#### Change to a Female Voice Model
+```
+'voice_data': os.path.join(get_package_share_directory("text_to_speech"), "open_jtalk_voice_data", "cmu_us_arctic_slt.htsvoice"),
+```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
