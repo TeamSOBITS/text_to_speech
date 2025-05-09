@@ -26,8 +26,6 @@ setup(
     entry_points={
         'console_scripts': [
             'tts = text_to_speech.tts:main',
-            'tts_client = text_to_speech.tts_client:main',
-            'tts_client_en = text_to_speech.tts_client_en:main',
         ],
     },
 )
